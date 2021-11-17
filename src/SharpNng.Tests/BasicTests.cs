@@ -23,8 +23,7 @@ namespace SharpNng.Tests
         public void TestRequestReply()
         {
             // https://nanomsg.org/gettingstarted/nng/reqrep.html
-
-            const string IpcName = "ipc:///tmp/reqrep.ipc";
+            string IpcName = $"ipc:///TestRequestReply_{Guid.NewGuid():N}.ipc";
 
             var sync = new EventWaitHandle(false, EventResetMode.ManualReset);
 
@@ -34,59 +33,72 @@ namespace SharpNng.Tests
 
                 int result = nng_rep0_open(ref sock);
                 nng_assert(result);
-
-                nng_listener listener = default;
-                result = nng_listen(sock, IpcName, ref listener, 0);
-                nng_assert(result);
-
-                IntPtr buf;
-                size_t sz = default;
-
-                sync.Set();
-
-                TestContext.Out.WriteLine("Server: Listening");
-
-                unsafe
+                try
                 {
-                    result = nng_recv(sock, new IntPtr(&buf), ref sz, NNG_FLAG_ALLOC);
+                    nng_listener listener = default;
+                    result = nng_listen(sock, IpcName, ref listener, 0);
                     nng_assert(result);
+
+                    IntPtr buf;
+                    size_t sz = default;
+
+                    sync.Set();
+
+                    TestContext.Out.WriteLine("Server: Listening");
+
+                    unsafe
+                    {
+                        result = nng_recv(sock, new IntPtr(&buf), ref sz, NNG_FLAG_ALLOC);
+                        nng_assert(result);
+                    }
+
+                    Assert.AreEqual(4, sz.Value.ToInt64());
+
+                    nng_free(buf, sz);
                 }
-
-                Assert.AreEqual(4, sz.Value.ToInt64());
-
-                nng_free(buf, sz);
-
-                result = nng_close(sock);
-                nng_assert(result);
+                finally
+                {
+                    nng_close(sock);
+                }
             };
 
             void Node1()
             {
+                TestContext.Out.WriteLine("Client: Started");
+
                 nng_socket sock = default;
 
                 int result = nng_req0_open(ref sock);
                 nng_assert(result);
 
-                nng_dialer dialer = default;
-                for (int i = 0; i < 10; i++)
-                {
-                    result = nng_dial(sock, IpcName, ref dialer, 0);
-                    if (result == 0) break;
-                    TestContext.Out.WriteLine("Client: dial failed, waiting for server to listen - sleep 100ms");
-                    Thread.Sleep(100);
-                }
-                nng_assert(result);
 
-                TestContext.Out.WriteLine("Client: Connected");
-                
-                unsafe
-                {
-                    int value = 0x6afedead;
-                    result = nng_send(sock, new IntPtr(&value), 4, 0);
+                    nng_dialer dialer = default;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        result = nng_dial(sock, IpcName, ref dialer, 0);
+                        if (result == 0) break;
+                        TestContext.Out.WriteLine("Client: dial failed, waiting for server to listen - sleep 100ms");
+                        Thread.Sleep(500);
+                    }
+
                     nng_assert(result);
+
+                try
+                {
+                    TestContext.Out.WriteLine("Client: Connected");
+
+                    unsafe
+                    {
+                        int value = 0x6afedead;
+                        result = nng_send(sock, new IntPtr(&value), 4, 0);
+                        nng_assert(result);
+                    }
+
                 }
-                result = nng_close(sock);
-                nng_assert(result);
+                finally
+                {
+                    nng_close(sock);
+                }
             };
 
             // Start the server
@@ -97,7 +109,7 @@ namespace SharpNng.Tests
             thread.Start();
 
             // Wait for the server to start
-            sync.WaitOne(2000);
+            sync.WaitOne(1000);
 
             // Run the client
             Node1();
