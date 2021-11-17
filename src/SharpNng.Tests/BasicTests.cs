@@ -26,7 +26,9 @@ namespace SharpNng.Tests
 
             const string IpcName = "ipc:///tmp/reqrep.ipc";
 
-            static void Node0()
+            var sync = new EventWaitHandle(true, EventResetMode.AutoReset);
+
+            void Node0()
             {
                 nng_socket sock = default;
 
@@ -39,6 +41,8 @@ namespace SharpNng.Tests
 
                 IntPtr buf;
                 size_t sz = default;
+
+                sync.Set();
 
                 unsafe
                 {
@@ -54,7 +58,7 @@ namespace SharpNng.Tests
                 nng_assert(result);
             };
 
-            static void Node1()
+            void Node1()
             {
                 nng_socket sock = default;
 
@@ -82,8 +86,8 @@ namespace SharpNng.Tests
             };
             thread.Start();
 
-            // TODO: fragile Sleep, check how to make this more solid
-            Thread.Sleep(500);
+            // Wait for the server to start
+            sync.WaitOne(2000);
 
             // Run the client
             Node1();
