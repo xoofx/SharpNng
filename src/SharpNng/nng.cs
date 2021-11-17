@@ -137,11 +137,12 @@ public static partial class nng
 
             var str = (string)obj;
             var length = Encoding.UTF8.GetByteCount(str);
-            var ptr = Marshal.AllocHGlobal(length + 1);
+            var ptr = (byte*)Marshal.AllocHGlobal(length + 1);
             //Encoding.UTF8.GetBytes((string)obj, 0, 
             fixed (char* pStr = str)
-                Encoding.UTF8.GetEncoder().GetBytes(pStr,  str.Length, (byte*)ptr, length, true);
-            return ptr;
+                Encoding.UTF8.GetEncoder().GetBytes(pStr,  str.Length, ptr, length, true);
+            ptr[length] = 0;
+            return (IntPtr)ptr;
         }
 
         public object MarshalNativeToManaged(IntPtr pNativeData)
