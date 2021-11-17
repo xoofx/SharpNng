@@ -44,6 +44,8 @@ namespace SharpNng.Tests
 
                 sync.Set();
 
+                TestContext.Out.WriteLine("Server: Listening");
+
                 unsafe
                 {
                     result = nng_recv(sock, new IntPtr(&buf), ref sz, NNG_FLAG_ALLOC);
@@ -66,9 +68,17 @@ namespace SharpNng.Tests
                 nng_assert(result);
 
                 nng_dialer dialer = default;
-                result = nng_dial(sock, IpcName, ref dialer, 0);
+                for (int i = 0; i < 10; i++)
+                {
+                    result = nng_dial(sock, IpcName, ref dialer, 0);
+                    if (result == 0) break;
+                    TestContext.Out.WriteLine("Client: dial failed, waiting for server to listen - sleep 100ms");
+                    Thread.Sleep(100);
+                }
                 nng_assert(result);
 
+                TestContext.Out.WriteLine("Client: Connected");
+                
                 unsafe
                 {
                     int value = 0x6afedead;
