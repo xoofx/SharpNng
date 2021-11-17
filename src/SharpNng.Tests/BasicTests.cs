@@ -23,7 +23,7 @@ namespace SharpNng.Tests
         public void TestRequestReply()
         {
             // https://nanomsg.org/gettingstarted/nng/reqrep.html
-            string IpcName = $"ipc:///TestRequestReply_{Guid.NewGuid():N}.ipc";
+            string IpcName = $"ipc:///tmp/SharpNng_{Guid.NewGuid():N}.ipc";
 
             var sync = new EventWaitHandle(false, EventResetMode.ManualReset);
 
