@@ -1,4 +1,4 @@
-# SharpNng [![Build Status](https://github.com/xoofx/SharpNng/workflows/managed/badge.svg?branch=master)](https://github.com/xoofx/SharpNng/actions) [![Build Status](https://github.com/xoofx/SharpNng/workflows/native/badge.svg?branch=master)](https://github.com/xoofx/SharpNng/actions) [![NuGet](https://img.shields.io/nuget/v/SharpNng.svg)](https://www.nuget.org/packages/SharpNng/)
+# SharpNng [![Build Status](https://github.com/xoofx/SharpNng/workflows/managed/badge.svg?branch=main)](https://github.com/xoofx/SharpNng/actions) [![Build Status](https://github.com/xoofx/SharpNng/workflows/native/badge.svg?branch=main)](https://github.com/xoofx/SharpNng/actions) [![NuGet](https://img.shields.io/nuget/v/SharpNng.svg)](https://www.nuget.org/packages/SharpNng/)
 
 <img align="right" width="160px" height="160px" src="img/logo.png">
 
