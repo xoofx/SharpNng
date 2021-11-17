@@ -16,7 +16,7 @@ namespace SharpNng.CodeGen
     /// </summary>
     class Program
     {
-        private static readonly string NngFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\ext\nng"));
+        private static readonly string NngFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\ext\nng"));
 
         static void Main(string[] args)
         {
