@@ -15,7 +15,7 @@
     <BuildNumber>9</BuildNumber>
     <VersionSuffix Condition="'$(VersionSuffix)' != '' AND '$(BuildNumber)' != ''">$(VersionSuffix).$(BuildNumber)</VersionSuffix>-->
     <Authors>Alexandre Mutel</Authors>
-    <PackageTags>nng; messaging</PackageTags>
+    <PackageTags>nanomsg; nng; messaging; network</PackageTags>
     <PackageReleaseNotes>https://github.com/xoofx/SharpNng/blob/master/changelog.md</PackageReleaseNotes>
     <PackageIcon>logo.png</PackageIcon>
     <PackageProjectUrl>https://github.com/xoofx/SharpNng</PackageProjectUrl>
