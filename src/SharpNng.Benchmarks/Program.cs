@@ -122,7 +122,7 @@ else
         process.WaitForExit(1000);
         processTerminated = true;
         Console.WriteLine($"{((double)count) / clock.Elapsed.TotalSeconds} req/s");
-        Console.WriteLine($"{clock.Elapsed.TotalMilliseconds / (double)count} ms/req");
+        Console.WriteLine($"{clock.Elapsed.TotalMilliseconds * 1000.0 / (double)count} μs/req");
     }
     finally
     {
