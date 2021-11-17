@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <LangVersion>10.0</LangVersion>
+    <RootNamespace />
+    <NoWarn>$(NoWarn);CS1591;CS0419;CS1734;CS1572;CS1573;CS1574</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <Description>SharpNng is a lightweight low-level managed wrapper around the Lightweight Messaging Library NNG - https://nng.nanomsg.org</Description>
+    <Copyright>Alexandre Mutel</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <!--<VersionSuffix>alpha</VersionSuffix>
+    <BuildNumber>9</BuildNumber>
+    <VersionSuffix Condition="'$(VersionSuffix)' != '' AND '$(BuildNumber)' != ''">$(VersionSuffix).$(BuildNumber)</VersionSuffix>-->
+    <Authors>Alexandre Mutel</Authors>
+    <PackageTags>nng; messaging</PackageTags>
+    <PackageReleaseNotes>https://github.com/xoofx/SharpNng/blob/master/changelog.md</PackageReleaseNotes>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/xoofx/SharpNng</PackageProjectUrl>
+    <PackageLicenseExpression>BSD-2-Clause</PackageLicenseExpression>
+    <!--Add support for sourcelink-->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../img/logo.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="runtimes\**\*">
+      <PackagePath>%(Identity)</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyMetadataCommand Remove="GitDescription" />
+    <PackageReference Include="MSBuildGitHash" Version="2.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <!--Add support for sourcelink-->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.*" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Nng.Tests": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
