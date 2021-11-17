@@ -48,7 +48,7 @@ function Build-Project {
         }
         $NETPlatform = "win"
         $NETSharedLibExtension = "dll"
-        $CMakeBuilder = "Visual Studio 17 2022"
+        $CMakeBuilder = "Visual Studio 16 2019"
         $CMakeArch = "-A$MsvcArch"
         $BuildPlatformSubFolder = "/nng/Release"
     } elseif ($IsLinux) {
