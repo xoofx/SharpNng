@@ -26,7 +26,7 @@ namespace SharpNng.Tests
 
             const string IpcName = "ipc:///tmp/reqrep.ipc";
 
-            var sync = new EventWaitHandle(true, EventResetMode.AutoReset);
+            var sync = new EventWaitHandle(false, EventResetMode.ManualReset);
 
             void Node0()
             {
