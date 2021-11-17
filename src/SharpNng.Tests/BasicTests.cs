@@ -71,7 +71,8 @@ namespace SharpNng.Tests
                 int result = nng_req0_open(ref sock);
                 nng_assert(result);
 
-
+                try
+                {
                     nng_dialer dialer = default;
                     for (int i = 0; i < 10; i++)
                     {
@@ -83,8 +84,6 @@ namespace SharpNng.Tests
 
                     nng_assert(result);
 
-                try
-                {
                     TestContext.Out.WriteLine("Client: Connected");
 
                     unsafe
@@ -93,7 +92,6 @@ namespace SharpNng.Tests
                         result = nng_send(sock, new IntPtr(&value), 4, 0);
                         nng_assert(result);
                     }
-
                 }
                 finally
                 {
