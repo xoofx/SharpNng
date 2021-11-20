@@ -10,7 +10,7 @@ SharpNng is a lightweight low-level managed wrapper around [NNG](https://nng.nan
 
 - Strict mapping with the C API
 - Pure DllImport library via `using static nng;`
-- Compatible with `netstandard2.0+`.
+- Compatible with `netstandard2.0` and `netstandard2.1+`
 - Fast interop with `Span` friendly API.
 
 ## Usage
