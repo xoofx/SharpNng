@@ -2,6 +2,8 @@
 // Licensed under the BSD-Clause 2 license.
 // See license.txt file in the project root for full license information.
 using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using NUnit.Framework;
 
@@ -9,21 +11,13 @@ using static nng;
 
 namespace SharpNng.Tests
 {
-    public class BasicTests
+    public class RequestReplyTests
     {
-        [Test]
-        public void CheckVersion()
-        {
-            var version = nng_version();
-            Assert.NotNull(version);
-            StringAssert.StartsWith("1.", version);
-        }
-
         [Test]
         public void TestRequestReply()
         {
             // https://nanomsg.org/gettingstarted/nng/reqrep.html
-            string IpcName = $"ipc:///tmp/SharpNng_{Guid.NewGuid():N}.ipc";
+            string ipcName = $"ipc:///tmp/SharpNng_{Guid.NewGuid():N}.ipc";
 
             var sync = new EventWaitHandle(false, EventResetMode.ManualReset);
 
@@ -36,15 +30,15 @@ namespace SharpNng.Tests
                 try
                 {
                     nng_listener listener = default;
-                    result = nng_listen(sock, IpcName, ref listener, 0);
+                    result = nng_listen(sock, ipcName, ref listener, 0);
                     nng_assert(result);
 
                     IntPtr buf;
                     size_t sz = default;
 
-                    sync.Set();
-
                     TestContext.Out.WriteLine("Server: Listening");
+
+                    sync.Set();
 
                     unsafe
                     {
@@ -58,7 +52,7 @@ namespace SharpNng.Tests
                 }
                 finally
                 {
-                    nng_close(sock);
+                    result = nng_close(sock);
                 }
             };
 
@@ -74,14 +68,7 @@ namespace SharpNng.Tests
                 try
                 {
                     nng_dialer dialer = default;
-                    for (int i = 0; i < 10; i++)
-                    {
-                        result = nng_dial(sock, IpcName, ref dialer, 0);
-                        if (result == 0) break;
-                        TestContext.Out.WriteLine("Client: dial failed, waiting for server to listen - sleep 100ms");
-                        Thread.Sleep(500);
-                    }
-
+                    result = nng_dial(sock, ipcName, ref dialer, 0);
                     nng_assert(result);
 
                     TestContext.Out.WriteLine("Client: Connected");
@@ -95,7 +82,7 @@ namespace SharpNng.Tests
                 }
                 finally
                 {
-                    nng_close(sock);
+                    result = nng_close(sock);
                 }
             };
 
