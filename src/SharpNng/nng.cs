@@ -9,12 +9,37 @@ public static partial class nng
 {
     public const string nngDll = "nng_native";
 
-    public partial struct size_t
+    /// <summary>
+    /// nng_send sends (or arranges to send) the data on the socket.  Note that
+    /// this function may (will!) return before any receiver has actually
+    /// received the data.  The return value will be zero to indicate that the
+    /// socket has accepted the entire data for send, or an errno to indicate
+    /// failure.
+    /// </summary>
+    public static unsafe int nng_send(nng.nng_socket arg0, ReadOnlySpan<byte> arg2, bool nonBlocking = false)
     {
-        public static implicit operator size_t(int value)
+        fixed (byte* arg4 = &MemoryMarshal.GetReference(arg2))
         {
-            return new size_t(new IntPtr(value));
+            return nng_send(arg0, (IntPtr)arg4, arg2.Length, nonBlocking ? NNG_FLAG_NONBLOCK : 0);
         }
+    }
+
+    /// <summary>
+    /// nng_recv receives message data into the socket, up to the supplied size.
+    /// The actual size of the message data will be written to the value pointed
+    /// to by size.  The flags may include NNG_FLAG_NONBLOCK and NNG_FLAG_ALLOC.
+    /// If NNG_FLAG_ALLOC is supplied then the library will allocate memory for
+    /// the caller.  In that case the pointer to the allocated will be stored
+    /// instead of the data itself.  The caller is responsible for freeing the
+    /// associated memory with nng_free().
+    /// </summary>
+    public static unsafe int nng_recv(nng.nng_socket arg0, out NngBuffer buffer, bool nonBlocking = false)
+    {
+        IntPtr pBuffer = default;
+        size_t size = default;
+        var result = nng_recv(arg0, new IntPtr(&pBuffer), ref size, (nonBlocking ? NNG_FLAG_NONBLOCK : 0) | NNG_FLAG_ALLOC);
+        buffer = result == 0 ? new NngBuffer(pBuffer, size.Value.ToInt32()) : default;
+        return result;
     }
 
     /// <summary>
@@ -27,7 +52,7 @@ public static partial class nng
     /// locks held.
     /// </summary>
     [DllImport(nngDll, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int nng_aio_alloc(out nng_aio arg0, IntPtr arg1, IntPtr arg2);
+    public static extern unsafe int nng_aio_alloc(out nng_aio arg0, delegate* unmanaged[Cdecl]<IntPtr, void> callback, IntPtr callbackContext = default);
 
     /// <summary>
     /// Throws a <see cref="NngException"/> if the result is non zero.
@@ -37,6 +62,58 @@ public static partial class nng
     {
         if (result == 0) return;
         throw NngException.Create((nng_errno_enum)result);
+    }
+
+    /// <summary>
+    /// Wrapper around a memory buffer allocated by <see cref="nng.nng_alloc"/>.
+    /// </summary>
+    public readonly struct NngBuffer : IDisposable
+    {
+        public NngBuffer(IntPtr pointer, int length)
+        {
+            if (pointer == IntPtr.Zero) throw new ArgumentException("pointer cannot be null", nameof(pointer));
+            if (length < 0) throw new ArgumentOutOfRangeException($"length ({length}) be < 0", nameof(length));
+            Pointer = pointer;
+            Length = length;
+        }
+
+        public NngBuffer(int length)
+        {
+            if (length < 0) throw new ArgumentOutOfRangeException(nameof(length));
+            Pointer = nng_alloc(length);
+            if (Pointer == IntPtr.Zero) throw new InvalidOperationException($"Unable to allocate {nameof(NngBuffer)} of size {length} bytes");
+            Length = length;
+        }
+
+        public readonly IntPtr Pointer;
+
+        public readonly int Length;
+
+        /// <summary>
+        /// Calls <see cref="nng.nng_free"/>
+        /// </summary>
+        public void Dispose()
+        {
+            nng_free(Pointer, Length);
+        }
+
+        public unsafe Span<byte> AsSpan()
+        {
+            return new Span<byte>((void*)Pointer, Length);
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(Pointer)}: 0x{Pointer.ToString("x8")}, {nameof(Length)}: {Length}";
+        }
+    }
+
+    public partial struct size_t
+    {
+        public static implicit operator size_t(int value)
+        {
+            return new size_t(new IntPtr(value));
+        }
     }
 
     /// <summary>
