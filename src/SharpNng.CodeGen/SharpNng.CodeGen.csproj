@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CppAst.CodeGen" Version="0.7.0" />
+    <PackageReference Include="CppAst.CodeGen" Version="0.8.0" />
   </ItemGroup>
 
 </Project>
