@@ -1,6 +1,6 @@
 # SharpNng [![Build Status](https://github.com/xoofx/SharpNng/workflows/managed/badge.svg?branch=main)](https://github.com/xoofx/SharpNng/actions) [![Build Status](https://github.com/xoofx/SharpNng/workflows/native/badge.svg?branch=main)](https://github.com/xoofx/SharpNng/actions) [![NuGet](https://img.shields.io/nuget/v/SharpNng.svg)](https://www.nuget.org/packages/SharpNng/)
 
-<img align="right" width="160px" height="160px" src="img/logo.png">
+<img align="right" width="160px" height="160px" src="https://raw.githubusercontent.com/xoofx/SharpNng/main/img/logo.png">
 
 SharpNng is a lightweight low-level managed wrapper around [NNG](https://nng.nanomsg.org/) a Lightweight Messaging Library.
 
@@ -121,7 +121,7 @@ You need to install the [.NET 6 SDK](https://dotnet.microsoft.com/download/dotne
 $ dotnet build src -c Release
 ```
 
-In order to rebuild the native binaries, you need to run the build scripts from [ext](ext/readme.md)
+In order to rebuild the native binaries, you need to run the build scripts from [ext](https://github.com/xoofx/SharpNng/blob/main/ext/readme.md)
 
 ## License
 

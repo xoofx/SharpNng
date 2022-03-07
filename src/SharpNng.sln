@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpNng.Tests", "SharpNng.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ABDCCD4D-8936-423B-AD35-3F19B5DC1EAA}"
 	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
 		..\changelog.md = ..\changelog.md
+		dotnet-releaser.toml = dotnet-releaser.toml
 		global.json = global.json
 		..\license.txt = ..\license.txt
 		..\.github\workflows\managed.yml = ..\.github\workflows\managed.yml
@@ -19,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\readme.md = ..\readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpNng.Benchmarks", "SharpNng.Benchmarks\SharpNng.Benchmarks.csproj", "{B8B0BD36-78F1-44BD-AA67-0BB47912D06C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpNng.Benchmarks", "SharpNng.Benchmarks\SharpNng.Benchmarks.csproj", "{B8B0BD36-78F1-44BD-AA67-0BB47912D06C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

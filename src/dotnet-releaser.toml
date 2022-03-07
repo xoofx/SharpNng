@@ -1,0 +1,6 @@
+# configuration file for dotnet-releaser
+[msbuild]
+project = "SharpNng.sln"
+[github]
+user = "xoofx"
+repo = "SharpNng"
