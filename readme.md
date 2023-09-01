@@ -4,7 +4,8 @@
 
 SharpNng is a lightweight low-level managed wrapper around [NNG](https://nng.nanomsg.org/) a Lightweight Messaging Library.
 
-> The current _native_ version of NNG used by SharpNng is `1.5.2`
+> **NOTE**: This project is archived as I had no use in the end about it.
+> The _native_ version of NNG used by SharpNng is `1.5.2`
 
 ## Features
 
